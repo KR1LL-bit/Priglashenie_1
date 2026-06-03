@@ -1,0 +1,853 @@
+<!DOCTYPE html>
+<html lang="ru">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0, user-scalable=no, viewport-fit=cover">
+<title>Свадебное приглашение — Кирилл и Элла</title>
+<link href="https://fonts.googleapis.com/css2?family=Cormorant+Garamond:ital,wght@0,300;0,400;0,600;1,300;1,400&family=Jost:wght@200;300;400&family=Dancing+Script:wght@400;600&display=swap" rel="stylesheet">
+<style>
+  *, *::before, *::after { box-sizing: border-box; margin: 0; padding: 0; }
+
+  body {
+    background: linear-gradient(150deg, #f9f6ef 0%, #efe8dd 100%);
+    min-height: 100vh;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    font-family: 'Jost', sans-serif;
+    overflow-x: hidden;
+    padding: 0;
+  }
+
+  /* СЦЕНА */
+  .scene {
+    width: 100%;
+    max-width: 510px;
+    margin: 0 auto;
+    position: relative;
+    min-height: 100vh;
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    justify-content: center;
+    padding: 2rem 0.8rem;
+  }
+
+  /* =============================================
+     ПРИГЛАШЕНИЕ (с тенью)
+     ============================================= */
+  .invitation-wrapper {
+    position: relative;
+    width: 100%;
+    max-width: 442px;
+    margin: 0 auto;
+    z-index: 5;
+    filter: drop-shadow(0 12px 25px rgba(0, 0, 0, 0.15));
+  }
+
+  .flip-container {
+    width: 100%;
+    perspective: 1500px;
+    cursor: pointer;
+  }
+
+  .flip-container.flipped .flipper {
+    transform: rotateY(180deg);
+  }
+
+  .flipper {
+    position: relative;
+    width: 100%;
+    transition: transform 0.8s cubic-bezier(0.4, 0.2, 0.2, 1);
+    transform-style: preserve-3d;
+  }
+
+  .front, .back {
+    position: relative;
+    width: 100%;
+    backface-visibility: hidden;
+    background: #fffef9;
+    border: 1px solid #e2d5c4;
+    padding: 3rem 2rem;
+    text-align: center;
+    border-radius: 16px;
+    min-height: 540px;
+    display: flex;
+    flex-direction: column;
+    justify-content: center;
+    box-sizing: border-box;
+  }
+
+  .front {
+    transform: rotateY(0deg);
+  }
+
+  .back {
+    position: absolute;
+    top: 0;
+    left: 0;
+    transform: rotateY(180deg);
+    min-height: 540px;
+    height: 100%;
+    display: flex;
+    flex-direction: column;
+    justify-content: center;
+    border-radius: 16px;
+  }
+
+  /* Угловые декоры */
+  .corner { position: absolute; width: 55px; height: 55px; z-index: 2; }
+  .tl { top: 12px; left: 12px; }
+  .tr { top: 12px; right: 12px; transform: scaleX(-1); }
+  .bl { bottom: 12px; left: 12px; transform: scaleY(-1); }
+  .br { bottom: 12px; right: 12px; transform: scale(-1); }
+
+  .pretitle {
+    font-weight: 300;
+    font-size: 10px;
+    letter-spacing: 3px;
+    text-transform: uppercase;
+    color: #5a4a3a;
+    margin-bottom: 1.2rem;
+    font-family: 'Jost', sans-serif;
+  }
+  .names {
+    font-family: 'Cormorant Garamond', serif;
+    font-weight: 300;
+    font-size: 46px;
+    line-height: 1.2;
+    color: #2e2219;
+  }
+  .names em { font-style: italic; font-weight: 400; }
+  .amp {
+    font-family: 'Cormorant Garamond', serif;
+    font-style: italic;
+    font-size: 30px;
+    color: #a87d60;
+    display: block;
+    margin: 0.3rem 0;
+  }
+  .divider {
+    display: flex;
+    align-items: center;
+    gap: 12px;
+    margin: 1.4rem 0;
+  }
+  .divider-line { flex: 1; height: 0.5px; background: #d0bfaa; }
+  .divider-dot  { width: 5px; height: 5px; border-radius: 50%; background: #a87d60; }
+  .body-text {
+    font-weight: 300;
+    font-size: 12px;
+    line-height: 1.65;
+    color: #4a3a2a;
+    margin-bottom: 1.4rem;
+    font-family: 'Jost', sans-serif;
+  }
+  
+  .datetime-block {
+    margin-bottom: 1.4rem;
+    text-align: center;
+  }
+  .date {
+    font-family: 'Cormorant Garamond', serif;
+    font-weight: 600;
+    font-size: 26px;
+    color: #2e2219;
+    letter-spacing: 2px;
+    display: block;
+    margin-bottom: 0.3rem;
+  }
+  .time {
+    font-family: 'Cormorant Garamond', serif;
+    font-weight: 400;
+    font-size: 14px;
+    color: #7a5a4a;
+    letter-spacing: 1px;
+    display: block;
+  }
+  .day-label {
+    font-weight: 300;
+    font-size: 9px;
+    letter-spacing: 2px;
+    text-transform: uppercase;
+    color: #7a5a4a;
+    display: block;
+    margin-top: 0.25rem;
+    font-family: 'Jost', sans-serif;
+  }
+
+  .location {
+    font-family: 'Cormorant Garamond', serif;
+    font-style: italic;
+    font-size: 15px;
+    color: #5a4a3a;
+    line-height: 1.5;
+    margin-bottom: 1.7rem;
+  }
+  .btn {
+    display: inline-block;
+    font-weight: 300;
+    font-size: 9px;
+    letter-spacing: 3px;
+    text-transform: uppercase;
+    color: #fffef9;
+    background: #a87d60;
+    padding: 8px 24px;
+    text-decoration: none;
+    transition: background 0.3s ease;
+    border-radius: 30px;
+    font-family: 'Jost', sans-serif;
+  }
+  .btn:hover { background: #8f6a50; }
+  .footer-note {
+    font-weight: 300;
+    font-size: 9px;
+    letter-spacing: 2px;
+    color: #7a6a5a;
+    margin-top: 1.4rem;
+    font-family: 'Jost', sans-serif;
+  }
+  .back-title {
+    font-family: 'Cormorant Garamond', serif;
+    font-weight: 300;
+    font-size: 30px;
+    color: #2e2219;
+    margin-bottom: 1.2rem;
+  }
+  .schedule { width: 100%; margin: 0.8rem 0; }
+  .schedule-item {
+    display: flex;
+    align-items: baseline;
+    justify-content: space-between;
+    margin-bottom: 0.9rem;
+    font-weight: 300;
+    font-size: 12px;
+    color: #4a3a2a;
+    border-bottom: 0.5px dashed #d0bfaa;
+    padding-bottom: 0.5rem;
+    font-family: 'Jost', sans-serif;
+  }
+  .schedule-time {
+    font-family: 'Cormorant Garamond', serif;
+    font-weight: 600;
+    font-size: 14px;
+    color: #a87d60;
+    min-width: 60px;
+    text-align: left;
+  }
+  .schedule-event { text-align: right; line-height: 1.4; }
+  .back-divider {
+    width: 55px;
+    height: 0.5px;
+    background: #d0bfaa;
+    margin: 1rem auto;
+  }
+  .back-location {
+    font-family: 'Cormorant Garamond', serif;
+    font-style: italic;
+    font-size: 15px;
+    color: #5a4a3a;
+    margin-top: 1.2rem;
+    margin-bottom: 1.5rem;
+    line-height: 1.5;
+  }
+  .gifts-note {
+    font-family: 'Jost', sans-serif;
+    font-weight: 200;
+    font-size: 11px;
+    letter-spacing: 1.5px;
+    text-transform: uppercase;
+    color: #7a6a5a;
+    text-align: center;
+    margin-top: 1rem;
+    margin-bottom: 1.2rem;
+    padding-top: 0.8rem;
+    border-top: 0.5px solid #d0bfaa;
+    width: 80%;
+    margin-left: auto;
+    margin-right: auto;
+    line-height: 1.6;
+  }
+  .hint, .flip-hint {
+    font-family: 'Jost', sans-serif;
+    font-weight: 300;
+    font-size: 8px;
+    letter-spacing: 2px;
+    text-transform: uppercase;
+    color: #7a6a5a;
+    margin-top: 1rem;
+  }
+
+  /* =============================================
+     КОНВЕРТ — МНОЖЕСТВО МАЛЕНЬКИХ ЗВЁЗДОЧЕК
+     ============================================= */
+  .envelope-container {
+    position: fixed;
+    top: 0;
+    left: 0;
+    right: 0;
+    bottom: 0;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    z-index: 20;
+    pointer-events: none;
+  }
+
+  .envelope {
+    position: relative;
+    width: 100%;
+    max-width: 464px;
+    margin: 0 auto;
+    background: #f5eedc;
+    filter: drop-shadow(0 15px 35px rgba(0, 0, 0, 0.2));
+    border-radius: 0 0 16px 16px;
+    pointer-events: auto;
+    transition: opacity 0.5s ease;
+    overflow: visible;
+  }
+
+  .envelope-frame {
+    position: absolute;
+    top: 6px;
+    left: 6px;
+    right: 6px;
+    bottom: 6px;
+    border: 0.5px solid rgba(140, 120, 90, 0.4);
+    border-radius: 14px;
+    pointer-events: none;
+    z-index: 15;
+  }
+
+  .envelope-flap {
+    position: absolute;
+    top: -1px;
+    left: -1px;
+    width: calc(100% + 2px);
+    height: 28%;
+    background: #e8dcc8;
+    clip-path: polygon(0 0, 100% 0, 50% 100%);
+    transform-origin: top center;
+    cursor: grab;
+    z-index: 12;
+    transition: transform 0.4s cubic-bezier(0.3, 0.8, 0.2, 1);
+    box-shadow: inset 0 2px 6px rgba(0,0,0,0.04);
+  }
+  .envelope-flap:active { cursor: grabbing; }
+  .envelope-flap::after {
+    content: "✧";
+    position: absolute;
+    bottom: 18px;
+    left: 50%;
+    transform: translateX(-50%);
+    font-size: 20px;
+    color: #bc9a6c;
+    text-shadow: 0 1px 2px rgba(0,0,0,0.05);
+    pointer-events: none;
+  }
+
+  .envelope-body {
+    position: relative;
+    padding: 5rem 1.5rem 4rem;
+    text-align: center;
+    background: #f5eedc;
+    min-height: 660px;
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    justify-content: center;
+    overflow: hidden;
+    border-radius: 0 0 16px 16px;
+  }
+
+  .envelope-content {
+    position: relative;
+    z-index: 7;
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    justify-content: center;
+    transition: opacity 0.3s ease;
+    width: 100%;
+    margin-top: 1.2rem;
+  }
+
+  .env-decor-left {
+    position: absolute;
+    left: 6px;
+    top: 50%;
+    transform: translateY(-50%);
+    width: 28px;
+    height: 70%;
+    background: url('data:image/svg+xml;utf8,<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 30 200" fill="none"><path d="M15 10 Q5 40 15 70 Q25 100 15 130 Q5 160 15 190" stroke="%23d4c4b0" stroke-width="0.6" fill="none"/><circle cx="15" cy="10" r="1.8" fill="%23d4c4b0"/><circle cx="8" cy="40" r="1.2" fill="%23d4c4b0"/><circle cx="21" cy="70" r="1.2" fill="%23d4c4b0"/><circle cx="8" cy="100" r="1.2" fill="%23d4c4b0"/><circle cx="21" cy="130" r="1.2" fill="%23d4c4b0"/><circle cx="8" cy="160" r="1.2" fill="%23d4c4b0"/><circle cx="15" cy="190" r="1.8" fill="%23d4c4b0"/></svg>') no-repeat center;
+    background-size: contain;
+    opacity: 0.45;
+    pointer-events: none;
+    z-index: 3;
+  }
+  .env-decor-right {
+    position: absolute;
+    right: 6px;
+    top: 50%;
+    transform: translateY(-50%);
+    width: 28px;
+    height: 70%;
+    background: url('data:image/svg+xml;utf8,<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 30 200" fill="none"><path d="M15 10 Q25 40 15 70 Q5 100 15 130 Q25 160 15 190" stroke="%23d4c4b0" stroke-width="0.6" fill="none"/><circle cx="15" cy="10" r="1.8" fill="%23d4c4b0"/><circle cx="22" cy="40" r="1.2" fill="%23d4c4b0"/><circle cx="9" cy="70" r="1.2" fill="%23d4c4b0"/><circle cx="22" cy="100" r="1.2" fill="%23d4c4b0"/><circle cx="9" cy="130" r="1.2" fill="%23d4c4b0"/><circle cx="22" cy="160" r="1.2" fill="%23d4c4b0"/><circle cx="15" cy="190" r="1.8" fill="%23d4c4b0"/></svg>') no-repeat center;
+    background-size: contain;
+    opacity: 0.45;
+    pointer-events: none;
+    z-index: 3;
+  }
+
+  /* МНОЖЕСТВО МЕЛКИХ ЗВЁЗДОЧЕК (большая частота маленьких, редкие крупные) */
+  .env-stars {
+    position: absolute;
+    top: 0;
+    left: 0;
+    width: 100%;
+    height: 100%;
+    pointer-events: none;
+    z-index: 4;
+    font-size: 12px;
+    color: #c6b59a;
+    opacity: 0.65;
+  }
+  /* Основная масса — очень маленькие звёздочки (✦ ✧ ·) */
+  .star-s { position: absolute; font-size: 7px; opacity: 0.5; }
+  .star-m { position: absolute; font-size: 9px; opacity: 0.6; }
+  .star-l { position: absolute; font-size: 13px; opacity: 0.5; }
+
+  /* Распределение по всему конверту — 40+ позиций */
+  .star1 { top: 5%; left: 12%; } .star2 { top: 12%; right: 9%; } .star3 { top: 20%; left: 6%; }
+  .star4 { top: 28%; right: 15%; } .star5 { top: 35%; left: 20%; } .star6 { top: 42%; right: 22%; }
+  .star7 { top: 48%; left: 8%; } .star8 { top: 55%; right: 30%; } .star9 { top: 62%; left: 25%; }
+  .star10 { top: 68%; right: 12%; } .star11 { top: 75%; left: 35%; } .star12 { top: 82%; right: 40%; }
+  .star13 { top: 88%; left: 15%; } .star14 { top: 92%; right: 55%; } .star15 { top: 15%; left: 45%; }
+  .star16 { top: 32%; left: 70%; } .star17 { top: 50%; right: 65%; } .star18 { top: 70%; left: 75%; }
+  .star19 { top: 85%; right: 80%; } .star20 { top: 8%; right: 35%; } .star21 { top: 18%; left: 55%; }
+  .star22 { top: 38%; right: 48%; } .star23 { top: 58%; left: 60%; } .star24 { top: 78%; right: 70%; }
+  .star25 { top: 95%; left: 50%; } .star26 { top: 3%; right: 68%; } .star27 { top: 45%; left: 85%; }
+  .star28 { top: 65%; right: 85%; } .star29 { top: 30%; left: 90%; } .star30 { top: 72%; left: 10%; }
+  .star31 { top: 42%; left: 42%; } .star32 { top: 60%; right: 48%; } .star33 { top: 25%; right: 55%; }
+  .star34 { top: 80%; left: 65%; } .star35 { top: 12%; left: 78%; } .star36 { top: 52%; right: 8%; }
+  .star37 { top: 88%; left: 85%; } .star38 { top: 5%; right: 88%; } .star39 { top: 35%; left: 35%; }
+  .star40 { top: 68%; right: 18%; }
+
+  /* Крупные звёзды (редко) */
+  .star-xl1 { top: 18%; left: 28%; font-size: 18px; opacity: 0.4; }
+  .star-xl2 { top: 55%; right: 20%; font-size: 20px; opacity: 0.35; }
+  .star-xl3 { top: 75%; left: 48%; font-size: 22px; opacity: 0.3; }
+  .star-xl4 { top: 22%; right: 45%; font-size: 16px; opacity: 0.4; }
+  .star-xl5 { top: 85%; right: 25%; font-size: 17px; opacity: 0.35; }
+
+  .env-arc-top {
+    position: absolute;
+    top: 10%;
+    left: 25%;
+    width: 50%;
+    height: 20px;
+    border-top: 0.5px solid rgba(140, 120, 90, 0.3);
+    border-radius: 50%;
+    pointer-events: none;
+    z-index: 4;
+  }
+  .env-arc-bottom {
+    position: absolute;
+    bottom: 10%;
+    left: 25%;
+    width: 50%;
+    height: 20px;
+    border-bottom: 0.5px solid rgba(140, 120, 90, 0.3);
+    border-radius: 50%;
+    pointer-events: none;
+    z-index: 4;
+  }
+
+  .envelope-photo {
+    width: 72%;
+    max-width: 270px;
+    height: auto;
+    display: block;
+    margin: 0 auto 0.8rem auto;
+    border-radius: 0;
+    box-shadow: none;
+    object-fit: cover;
+    position: relative;
+    z-index: 5;
+    background: transparent;
+  }
+
+  .wedding-exclamation {
+    font-family: 'Cormorant Garamond', serif;
+    font-weight: 300;
+    font-size: 30px;
+    color: #9e7b54;
+    text-align: center;
+    margin: 0.8rem 0 1rem 0;
+    letter-spacing: 1px;
+    position: relative;
+    z-index: 5;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    gap: 15px;
+  }
+  .wedding-exclamation::before,
+  .wedding-exclamation::after {
+    content: "✧";
+    font-size: 20px;
+    color: #bc9a6c;
+    opacity: 0.7;
+  }
+
+  .env-sub {
+    font-family: 'Jost', sans-serif;
+    font-weight: 200;
+    font-size: 12px;
+    letter-spacing: 2.2px;
+    text-transform: uppercase;
+    color: #705a42;
+    margin-top: 0.2rem;
+    position: relative;
+    z-index: 5;
+  }
+
+  .envelope-hole {
+    position: absolute;
+    top: 0;
+    left: 0;
+    width: 100%;
+    height: 38%;
+    background: transparent;
+    clip-path: polygon(0% 0%, 100% 0%, 100% 100%, 50% 32%, 0% 100%);
+    z-index: 8;
+    pointer-events: none;
+  }
+
+  .hole-cover {
+    position: absolute;
+    top: -1px;
+    left: 0;
+    width: 100%;
+    height: 38%;
+    background: #f5eedc;
+    clip-path: polygon(0% 0%, 100% 0%, 100% 100%, 50% 32%, 0% 100%);
+    transition: transform 0.4s cubic-bezier(0.3, 0.8, 0.2, 1);
+    transform-origin: top center;
+    z-index: 9;
+  }
+
+  .envelope.flap-opened .hole-cover {
+    transform: translateY(-100%);
+  }
+
+  .envelope.flap-opened .envelope-content {
+    opacity: 0;
+    visibility: hidden;
+  }
+
+  .center-hint {
+    position: absolute;
+    top: 50%;
+    left: 50%;
+    transform: translate(-50%, -50%);
+    font-family: 'Jost', sans-serif;
+    font-weight: 300;
+    font-size: 14px;
+    letter-spacing: 2px;
+    text-transform: uppercase;
+    color: #b3a188;
+    text-align: center;
+    z-index: 10;
+    opacity: 0;
+    visibility: hidden;
+    transition: opacity 0.4s ease 0.2s, visibility 0.4s 0.2s;
+    white-space: nowrap;
+    text-shadow: 0 1px 2px rgba(0,0,0,0.02);
+    pointer-events: none;
+    background: rgba(245, 240, 232, 0.5);
+    padding: 6px 14px;
+    border-radius: 30px;
+    backdrop-filter: blur(3px);
+  }
+
+  .envelope.flap-opened .center-hint {
+    opacity: 1;
+    visibility: visible;
+  }
+
+  @media (max-width: 480px) {
+    .scene { max-width: 100%; }
+    .envelope { max-width: 95%; }
+    .invitation-wrapper { max-width: 90%; filter: drop-shadow(0 8px 18px rgba(0, 0, 0, 0.12)); }
+    .front, .back { 
+      padding: 2rem 1.2rem; 
+      border-radius: 14px; 
+      min-height: 480px;
+    }
+    .names { font-size: 38px; }
+    .back-title { font-size: 26px; }
+    .date { font-size: 23px; }
+    .envelope-body {
+      padding: 4rem 1rem 3rem;
+      min-height: 580px;
+    }
+    .envelope-frame {
+      top: 4px;
+      left: 4px;
+      right: 4px;
+      bottom: 4px;
+      border-radius: 12px;
+    }
+    .center-hint { font-size: 12px; }
+    .envelope-flap::after { bottom: 12px; font-size: 18px; }
+    .envelope-photo { width: 85%; max-width: 220px; }
+    .wedding-exclamation { font-size: 26px; margin: 0.6rem 0 0.8rem; gap: 10px; }
+    .wedding-exclamation::before,
+    .wedding-exclamation::after { font-size: 16px; }
+    .env-sub { font-size: 10px; letter-spacing: 2px; margin-top: 0.1rem; }
+    .env-decor-left, .env-decor-right { width: 20px; opacity: 0.3; }
+    .env-stars { opacity: 0.4; }
+    .star-s, .star-m, .star-l { font-size: 5px; }
+    .star-xl1, .star-xl2, .star-xl3, .star-xl4, .star-xl5 { font-size: 12px; }
+    .back-location { font-size: 13px; margin-top: 1rem; margin-bottom: 1.2rem; }
+    .gifts-note { font-size: 9px; margin-top: 0.8rem; margin-bottom: 1rem; padding-top: 0.6rem; }
+    .hint, .flip-hint { margin-top: 0.8rem; }
+    .envelope-content { margin-top: 1rem; }
+  }
+</style>
+</head>
+<body>
+
+<div class="scene">
+  
+  <!-- АУДИО ЭЛЕМЕНТ -->
+  <audio id="flapSound" preload="auto">
+    <source src="https://cdn.pixabay.com/download/audio/2022/03/10/audio_c8c8f0c6b2.mp3?filename=paper-tear-1-185034.mp3" type="audio/mpeg">
+  </audio>
+
+  <!-- ПРИГЛАШЕНИЕ -->
+  <div class="invitation-wrapper">
+    <div class="flip-container" id="flipContainer">
+      <div class="flipper">
+        
+        <!-- ЛИЦЕВАЯ СТОРОНА -->
+        <div class="front">
+          <svg class="corner tl" viewBox="0 0 64 64" fill="none">
+            <path d="M3 61 L3 3 L61 3" stroke="#d0bfaa" stroke-width="0.8" fill="none"/>
+            <path d="M3 22 Q14 15 10 3" stroke="#b8977e" stroke-width="0.8" fill="none"/>
+            <circle cx="10" cy="3" r="2.2" fill="#b8977e"/>
+          </svg>
+          <svg class="corner tr" viewBox="0 0 64 64" fill="none">
+            <path d="M3 61 L3 3 L61 3" stroke="#d0bfaa" stroke-width="0.8" fill="none"/>
+            <path d="M3 22 Q14 15 10 3" stroke="#b8977e" stroke-width="0.8" fill="none"/>
+            <circle cx="10" cy="3" r="2.2" fill="#b8977e"/>
+          </svg>
+          <svg class="corner bl" viewBox="0 0 64 64" fill="none">
+            <path d="M3 61 L3 3 L61 3" stroke="#d0bfaa" stroke-width="0.8" fill="none"/>
+            <path d="M3 22 Q14 15 10 3" stroke="#b8977e" stroke-width="0.8" fill="none"/>
+            <circle cx="10" cy="3" r="2.2" fill="#b8977e"/>
+          </svg>
+          <svg class="corner br" viewBox="0 0 64 64" fill="none">
+            <path d="M3 61 L3 3 L61 3" stroke="#d0bfaa" stroke-width="0.8" fill="none"/>
+            <path d="M3 22 Q14 15 10 3" stroke="#b8977e" stroke-width="0.8" fill="none"/>
+            <circle cx="10" cy="3" r="2.2" fill="#b8977e"/>
+          </svg>
+
+          <p class="pretitle">Мы рады пригласить Вас</p>
+          <h1 class="names"><em>Кирилл</em><span class="amp">&amp;</span><em>Элла</em></h1>
+          <div class="divider"><div class="divider-line"></div><div class="divider-dot"></div><div class="divider-line"></div></div>
+          <p class="body-text">С великой радостью приглашаем Вас разделить с нами один из самых важных дней нашей жизни — торжество нашего бракосочетания.</p>
+          
+          <div class="datetime-block">
+            <span class="date">15 · 09 · 2026</span>
+            <span class="time">Начало в 12:00</span>
+            <span class="day-label">Вторник</span>
+          </div>
+          
+          <div class="divider"><div class="divider-line"></div><div class="divider-dot"></div><div class="divider-line"></div></div>
+          <p class="location">Екатерининский зал<br>ул. Офицерская, 47</p>
+          <a href="https://forms.gle/eYrsk7PbC3SGS9p68" class="btn" target="_blank" rel="noopener noreferrer">Подтвердить присутствие</a>
+          <p class="footer-note">Просим подтвердить участие до 1 сентября 2026</p>
+          <p class="flip-hint">↻ нажмите, чтобы увидеть программу</p>
+        </div>
+
+        <!-- ОБРАТНАЯ СТОРОНА (ПРОГРАММА ДНЯ) -->
+        <div class="back">
+          <svg class="corner tl" viewBox="0 0 64 64" fill="none"><path d="M3 61 L3 3 L61 3" stroke="#d0bfaa" stroke-width="0.8" fill="none"/><path d="M3 22 Q14 15 10 3" stroke="#b8977e" stroke-width="0.8" fill="none"/><circle cx="10" cy="3" r="2.2" fill="#b8977e"/></svg>
+          <svg class="corner tr" viewBox="0 0 64 64" fill="none"><path d="M3 61 L3 3 L61 3" stroke="#d0bfaa" stroke-width="0.8" fill="none"/><path d="M3 22 Q14 15 10 3" stroke="#b8977e" stroke-width="0.8" fill="none"/><circle cx="10" cy="3" r="2.2" fill="#b8977e"/></svg>
+          <svg class="corner bl" viewBox="0 0 64 64" fill="none"><path d="M3 61 L3 3 L61 3" stroke="#d0bfaa" stroke-width="0.8" fill="none"/><path d="M3 22 Q14 15 10 3" stroke="#b8977e" stroke-width="0.8" fill="none"/><circle cx="10" cy="3" r="2.2" fill="#b8977e"/></svg>
+          <svg class="corner br" viewBox="0 0 64 64" fill="none"><path d="M3 61 L3 3 L61 3" stroke="#d0bfaa" stroke-width="0.8" fill="none"/><path d="M3 22 Q14 15 10 3" stroke="#b8977e" stroke-width="0.8" fill="none"/><circle cx="10" cy="3" r="2.2" fill="#b8977e"/></svg>
+
+          <h2 class="back-title">Программа дня</h2>
+          <div class="schedule">
+            <div class="schedule-item"><span class="schedule-time">12:00</span><span class="schedule-event">Сборы у Екатерининского зала</span></div>
+            <div class="schedule-item"><span class="schedule-time">12:30</span><span class="schedule-event">Торжество бракосочетания</span></div>
+            <div class="schedule-item"><span class="schedule-time">13:00</span><span class="schedule-event">Общая фотосессия</span></div>
+            <div class="schedule-item"><span class="schedule-time">13:30</span><span class="schedule-event">Мини-фуршет на улице</span></div>
+            <div class="schedule-item"><span class="schedule-time">14:00</span><span class="schedule-event">Завершение мероприятия</span></div>
+          </div>
+          <div class="back-divider"></div>
+          
+          <p class="back-location">Екатерининский зал · ул. Офицерская, 47</p>
+          
+          <div class="gifts-note">
+            Подарки в честь торжества<br>принимаются после завершения мероприятия
+          </div>
+          
+          <p class="hint">← нажмите, чтобы вернуться</p>
+        </div>
+
+      </div>
+    </div>
+  </div>
+
+  <!-- КОНВЕРТ — МНОЖЕСТВО ЗВЁЗД, НОВОЕ ФОТО, ТЁМНАЯ ПОДСКАЗКА -->
+  <div class="envelope-container" id="envelopeContainer">
+    <div class="envelope" id="envelope">
+      <div class="envelope-frame"></div>
+      <div class="envelope-flap" id="envelopeFlap"></div>
+      <div class="envelope-body" id="envelopeBody">
+        <div class="env-decor-left"></div>
+        <div class="env-decor-right"></div>
+        
+        <!-- МНОЖЕСТВО ЗВЁЗДОЧЕК (40+ маленьких, 5 крупных) -->
+        <div class="env-stars">
+          <span class="star-s star1">✦</span> <span class="star-s star2">✧</span> <span class="star-s star3">·</span>
+          <span class="star-s star4">✦</span> <span class="star-s star5">✧</span> <span class="star-s star6">·</span>
+          <span class="star-s star7">✦</span> <span class="star-s star8">✧</span> <span class="star-s star9">·</span>
+          <span class="star-s star10">✦</span> <span class="star-s star11">✧</span> <span class="star-s star12">·</span>
+          <span class="star-s star13">✦</span> <span class="star-s star14">✧</span> <span class="star-s star15">·</span>
+          <span class="star-s star16">✦</span> <span class="star-s star17">✧</span> <span class="star-s star18">·</span>
+          <span class="star-s star19">✦</span> <span class="star-s star20">✧</span> <span class="star-s star21">·</span>
+          <span class="star-s star22">✦</span> <span class="star-s star23">✧</span> <span class="star-s star24">·</span>
+          <span class="star-s star25">✦</span> <span class="star-s star26">✧</span> <span class="star-s star27">·</span>
+          <span class="star-s star28">✦</span> <span class="star-s star29">✧</span> <span class="star-s star30">·</span>
+          <span class="star-m star31">✦</span> <span class="star-m star32">✧</span> <span class="star-m star33">·</span>
+          <span class="star-m star34">✦</span> <span class="star-m star35">✧</span> <span class="star-m star36">·</span>
+          <span class="star-m star37">✦</span> <span class="star-m star38">✧</span> <span class="star-m star39">·</span>
+          <span class="star-m star40">✦</span>
+          
+          <!-- Крупные редкие звёзды -->
+          <span class="star-xl1">✧</span>
+          <span class="star-xl2">✦</span>
+          <span class="star-xl3">✧</span>
+          <span class="star-xl4">✦</span>
+          <span class="star-xl5">✤</span>
+        </div>
+        <div class="env-arc-top"></div>
+        <div class="env-arc-bottom"></div>
+        
+        <div class="envelope-hole"></div>
+        <div class="hole-cover" id="holeCover"></div>
+        <div class="center-hint" id="centerHint">потяните конверт вниз</div>
+        
+        <div class="envelope-content" id="envelopeContent">
+          <!-- НОВОЕ ФОТО -->
+          <img class="envelope-photo" src="https://i.ibb.co/QvbxbXnf/kirill-ella.jpg" alt="Кирилл и Элла">
+          <div class="wedding-exclamation">Ура, мы женимся!</div>
+          <p class="env-sub">откройте конверт сверху</p>
+        </div>
+      </div>
+    </div>
+  </div>
+
+</div>
+
+<script>
+  // ЗВУК ОТКРЫТИЯ КЛАПАНА
+  const flapSound = document.getElementById('flapSound');
+  
+  function playFlapSound() {
+    if (flapSound) {
+      flapSound.currentTime = 0;
+      flapSound.play().catch(e => console.log('Звук заблокирован'));
+    }
+  }
+
+  // ============================================
+  // КОНВЕРТ ИСЧЕЗАЕТ СРАЗУ ПОСЛЕ ОТКРЫТИЯ КЛАПАНА
+  // ============================================
+  const flap = document.getElementById('envelopeFlap');
+  const envelope = document.getElementById('envelope');
+  const envelopeContainer = document.getElementById('envelopeContainer');
+  const flipContainer = document.getElementById('flipContainer');
+
+  let startY = 0;
+  let flapOpened = false;
+  let isDraggingFlap = false;
+
+  function openFlap() {
+    if (flapOpened) return;
+    flapOpened = true;
+    flap.style.transform = 'rotateX(-175deg)';
+    playFlapSound();
+    envelope.classList.add('flap-opened');
+    
+    envelope.style.transition = 'opacity 0.5s ease';
+    envelope.style.opacity = '0';
+    setTimeout(() => {
+      envelopeContainer.style.display = 'none';
+    }, 500);
+  }
+
+  flap.addEventListener('mousedown', (e) => {
+    if (flapOpened) return;
+    e.preventDefault();
+    isDraggingFlap = true;
+    startY = e.clientY;
+    flap.style.transition = 'none';
+  });
+  
+  flap.addEventListener('touchstart', (e) => {
+    if (flapOpened) return;
+    e.preventDefault();
+    isDraggingFlap = true;
+    startY = e.touches[0].clientY;
+    flap.style.transition = 'none';
+  }, { passive: false });
+
+  window.addEventListener('mousemove', (e) => {
+    if (!isDraggingFlap || flapOpened) return;
+    e.preventDefault();
+    const delta = startY - e.clientY;
+    if (delta > 0) {
+      let rotation = Math.min(delta * 0.8, 175);
+      flap.style.transform = `rotateX(-${rotation}deg)`;
+      if (rotation >= 140) openFlap();
+    }
+  });
+  
+  window.addEventListener('touchmove', (e) => {
+    if (!isDraggingFlap || flapOpened) return;
+    e.preventDefault();
+    const delta = startY - e.touches[0].clientY;
+    if (delta > 0) {
+      let rotation = Math.min(delta * 0.8, 175);
+      flap.style.transform = `rotateX(-${rotation}deg)`;
+      if (rotation >= 140) openFlap();
+    }
+  }, { passive: false });
+
+  window.addEventListener('mouseup', () => {
+    if (!isDraggingFlap) return;
+    isDraggingFlap = false;
+    flap.style.transition = 'transform 0.4s cubic-bezier(0.3, 0.8, 0.2, 1)';
+    if (!flapOpened) flap.style.transform = '';
+  });
+  
+  window.addEventListener('touchend', () => {
+    if (!isDraggingFlap) return;
+    isDraggingFlap = false;
+    flap.style.transition = 'transform 0.4s cubic-bezier(0.3, 0.8, 0.2, 1)';
+    if (!flapOpened) flap.style.transform = '';
+  });
+
+  flipContainer.addEventListener('click', function(e) {
+    if (e.target.classList && e.target.classList.contains('btn')) return;
+    this.classList.toggle('flipped');
+  });
+</script>
+
+</body>
+</html>
